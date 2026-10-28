@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090b14">
+<link rel="icon" href="data:,">
 <title>Khoidz Overflow • Cloud Phone</title>
 <style>
 :root{--bg:#090b14;--panel:#141827cc;--line:#ffffff18;--text:#f4f6ff;--muted:#98a2bd;--cyan:#70edff;--violet:#ad8bff;--green:#63f0b2}
@@ -14,3 +15,351 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background-ima
 .tab.active{color:var(--cyan);border-color:#70edff70;background:#70edff12;box-shadow:0 0 20px #70edff0b}
 .active-wrap{max-width:560px}.empty{text-align:center;padding:32px;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#6e7894;font-size:9px;margin-top:24px}
 .getkey-panel{margin:24px 0;padding:22px;border:1px solid #ad8bff40;background:linear-gradient(135deg,#17172acc,#101d2bcc);backdrop-filter:blur(16px);border-radius:22px;box-shadow:0 18px 60px #0003}
+.getkey-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.getkey-title{margin:7px 0;font-size:23px;letter-spacing:-.5px}
+.key-badge{padding:8px 11px;border-radius:99px;border:1px solid #ad8bff55;background:#ad8bff12;color:#d9caff;font-size:10px;font-weight:800}
+.key-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.key-box{padding:15px;border-radius:14px;border:1px solid var(--line);background:#ffffff06;min-width:0}
+.key-box small{display:block;color:var(--muted);font-size:10px;margin-bottom:8px}
+.key-value{font-weight:850;font-size:clamp(12px,2vw,16px);letter-spacing:1px;overflow-wrap:anywhere;color:var(--cyan)}
+.key-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.key-controls .btn{flex:1;min-width:145px}
+.key-message{margin-top:12px;padding:11px 13px;border-radius:11px;font-size:11px;line-height:1.6;background:#ffffff07;border:1px solid var(--line);color:var(--muted)}
+.key-message.good{color:var(--green);border-color:#63f0b240}
+.key-message.bad{color:#ff9eaf;border-color:#ff718540}
+.key-input{flex:2;min-width:180px;padding:12px;border-radius:10px;border:1px solid #ffffff24;background:#080b14;color:var(--text);outline:none;font:700 12px system-ui;letter-spacing:.5px}
+.key-input:focus{border-color:var(--cyan)}
+
+.gate{position:fixed;inset:0;z-index:100;display:flex;padding:16px;overflow:auto;background:radial-gradient(ellipse at 20% 10%,#3a2a86cc,transparent 45%),radial-gradient(ellipse at 85% 85%,#0f5566cc,transparent 45%),#05060cf2;backdrop-filter:blur(10px)}
+.gate.hide{display:none}
+.gate .getkey-panel{margin:auto;width:100%;max-width:520px;border-color:#70edff55;box-shadow:0 0 60px #70edff22,0 0 120px #ad8bff22;animation:gin .5s ease}
+.gate .getkey-title{font-size:28px}
+@keyframes gin{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+body.locked .wrap,body.locked .topclock{filter:blur(8px);pointer-events:none;user-select:none}
+.topclock{position:sticky;top:0;z-index:50;display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 12px;background:#090b14ee;backdrop-filter:blur(14px);border-bottom:1px solid #ad8bff40;font-size:12px;cursor:pointer}
+.topclock b{font-size:16px;letter-spacing:1.5px;color:var(--cyan);font-variant-numeric:tabular-nums}
+.topclock.off b{color:#ff9eaf}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:22px 0}
+.tool{padding:18px}.tool h3{margin:0 0 4px;font-size:16px}
+.field{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.field>*{flex:1;min-width:80px}
+.key-input.sm{min-width:80px;flex:1}
+textarea.key-input{width:100%;min-height:84px;resize:vertical;font-weight:500;flex:none}
+select.key-input{flex:1}
+.clip-item{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 10px;margin-top:6px;border:1px solid var(--line);border-radius:9px;background:#ffffff06;font-size:11px}
+.clip-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.clip-item .btn{flex:0 0 auto;padding:6px 9px;font-size:10px}
+@media(max-width:850px){.tools{grid-template-columns:1fr}}
+@media(max-width:850px){.hero{grid-template-columns:1fr}.devices{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:570px){.key-grid{grid-template-columns:1fr}.getkey-panel{padding:17px}.wrap{padding:16px 12px 32px}.devices{grid-template-columns:1fr}.hero-main{padding:22px}.hero h2{font-size:35px}.top{align-items:flex-start}.stats{flex-wrap:wrap}}
+</style></head>
+<body class="locked">
+<div class="gate" id="gate"><section class="getkey-panel" id="getkey">
+  <div class="getkey-head">
+    <div><div class="eyebrow">🔒 NHẬP KEY ĐỂ TRUY CẬP</div><h3 class="getkey-title">KHOIDZ <span class="gradient">GETKEY SYSTEM</span></h3><div class="muted">Nhập key để vào hệ thống · thời hạn 50 giờ (bản chính thức)</div></div>
+    <span class="key-badge">⌁ 50H ACCESS PASS</span>
+  </div>
+  <div class="key-grid">
+    <div class="key-box"><small>TRẠNG THÁI KEY</small><div class="key-value" id="issuedKey">Chưa kích hoạt</div></div>
+    <div class="key-box"><small>THỜI GIAN CÒN LẠI</small><div class="key-value" id="keyTimer">--:--:--</div></div>
+  </div>
+  <div class="key-message" id="keyStatus" role="status">Nhập key để truy cập. Key có hiệu lực 50 giờ kể từ lúc xác minh thành công.</div>
+  <div style="margin-top:18px">
+    <label for="keyInput" class="muted" style="display:block;margin-bottom:8px">NHẬP KEY</label>
+    <div class="key-controls" style="margin-top:0">
+      <input class="key-input" id="keyInput" autocomplete="off" spellcheck="false" placeholder="Nhập key của bạn...">
+      <button type="button" class="btn secondary" id="verifyKeyBtn">✓ Xác minh key</button>
+    </div>
+  </div>
+<div style="margin-top:18px;text-align:center;font-size:10px;letter-spacing:.8px;color:#7d88a8">KEY: 6V6Cloudphonefree</div>
+</section></div>
+<div class="topclock off" id="topClock" title="Đi tới phần key"><span>⏱ KEY CÒN LẠI</span><b id="topClockTime">--:--:--</b><span id="topClockState" class="muted">Chưa kích hoạt</span></div>
+<div class="wrap">
+<header class="top"><div class="brand"><div class="logo">KO</div><div><h1>KHOIDZ OVERFLOW</h1><p>CLOUD PHONE PLATFORM</p></div></div><div class="stats"><div class="pill"><span class="dot"></span>Dashboard online</div><div class="pill">ANDROID CLOUD</div></div></header>
+<section class="hero"><div class="panel hero-main"><div class="eyebrow">YOUR VIRTUAL ANDROID SPACE</div><h2>Cloud Phone.<br><span class="gradient">Play without limits.</span></h2><p>Bảng điều khiển quản lý nhiều thẻ thiết bị, theo dõi cấu hình và mở phiên chơi chỉ với một lần chạm.</p><div class="actions"><button class="btn primary" id="createTop">＋ Tạo máy mới</button><button class="btn secondary" id="playFirst">↗ Vào Chơi</button></div></div>
+<aside class="panel hero-side"><div><div class="muted">THẺ THIẾT BỊ ĐÃ TẠO</div><div class="big"><span id="count">1</span> <span class="muted">máy</span></div><div class="bar"><span id="barfill"></span></div></div><div class="muted">Cloud Phone Free · Key VIP 50 giờ.</div></aside></section>
+
+
+
+<div class="head"><div><h3>Thiết bị của bạn</h3><p>Chọn tab để chuyển giữa các máy đã tạo</p></div><div class="actions"><button class="btn secondary" id="reset">↻ Làm mới</button><button class="btn primary" id="create">＋ Tạo máy</button></div></div>
+<nav class="device-tabs" id="deviceTabs" aria-label="Chuyển đổi thiết bị"></nav>
+<main id="activeDevice"></main>
+<section class="tools" id="tools">
+<div class="panel tool"><h3>🖥 Độ phân giải màn hình</h3><div class="muted" id="resFor">Áp dụng cho máy đang chọn</div>
+<div class="field"><select class="key-input" id="resPreset"><option value="720x1280">720 × 1280 (HD)</option><option value="1080x1920">1080 × 1920 (Full HD)</option><option value="1080x2400">1080 × 2400 (20:9)</option><option value="1440x2560">1440 × 2560 (2K)</option><option value="custom">Tùy chỉnh…</option></select></div>
+<div class="field"><input class="key-input sm" id="resW" type="number" min="240" max="4096" placeholder="Rộng"><input class="key-input sm" id="resH" type="number" min="240" max="4096" placeholder="Cao"><input class="key-input sm" id="resDpi" type="number" min="120" max="640" placeholder="DPI"></div>
+<div class="key-controls"><button type="button" class="btn primary" id="resApply">✓ Áp dụng</button></div><div class="key-message" id="resMsg">Chọn mẫu có sẵn hoặc nhập thông số riêng.</div></div>
+<div class="panel tool"><h3>📋 Bảng nhớ tạm → Cloud Phone</h3><div class="muted">Dán nội dung từ máy thật của bạn rồi gửi vào máy ảo</div>
+<div class="field"><textarea class="key-input" id="clipText" placeholder="Dán văn bản từ máy thật vào đây..."></textarea></div>
+<div class="key-controls"><button type="button" class="btn secondary" id="clipPaste">⎘ Lấy từ bảng nhớ tạm</button><button type="button" class="btn primary" id="clipSend">➤ Gửi vào Cloud Phone</button></div>
+<div class="key-message" id="clipMsg">Nội dung gửi sẽ lưu theo từng máy.</div><div id="clipList"></div></div>
+</section>
+<footer class="foot"><span>© 2026 KHOIDZ OVERFLOW</span><span>VIRTUAL DEVICE MANAGER</span></footer></div>
+<script>
+const PLAY_URL = "https://www.uptoplay.net/runapk/create-androidapkxx.php";
+/* ===== CẤU HÌNH KEY ===== */
+const FIXED_KEY = "6V6Cloudphonefree";
+const KEY_LIFETIME_MS = 50 * 60 * 60 * 1000;
+
+const starter = [{id:1,name:"Thiết Bị Pro Android Lite",cpu:"8 vCPU*",ram:"8 GB*",fps:"60 FPS*",w:1080,h:1920,dpi:420,clip:[]}];
+let devices = starter.map(x => ({...x}));
+let nextId = 2;
+let activeId = 1;
+const icons = ["📱","🎮","⚡","🚀","🛰️","💠"];
+const $ = id => document.getElementById(id);
+function esc(value) {
+  return String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function saveState() {
+  try {
+    localStorage.setItem("ko_cloud_devices", JSON.stringify(devices));
+    localStorage.setItem("ko_cloud_active", String(activeId ?? ""));
+  } catch (e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem("ko_cloud_devices");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) devices = parsed.filter(d => d && Number.isFinite(Number(d.id)));
+    }
+    const savedActive = Number(localStorage.getItem("ko_cloud_active"));
+    if (savedActive) activeId = savedActive;
+    nextId = Math.max(0, ...devices.map(d => Number(d.id) || 0)) + 1;
+  } catch (e) {
+    devices = starter.map(x => ({...x})); nextId = 2; activeId = 1;
+  }
+}
+function render() {
+  $("count").textContent = devices.length;
+  $("barfill").style.width = Math.min(100, devices.length * 12) + "%";
+  const tabs = $("deviceTabs"), root = $("activeDevice");
+  if (!devices.length) {
+    tabs.innerHTML = "";
+    root.innerHTML = '<div class="empty">Chưa có máy nào. Nhấn “Tạo máy” để thêm.</div>';
+    saveState(); syncTools(); return;
+  }
+  if (!devices.some(d => Number(d.id) === Number(activeId))) activeId = devices[0].id;
+  tabs.innerHTML = devices.map(d =>
+    `<button type="button" class="tab ${Number(d.id) === Number(activeId) ? "active" : ""}" data-device-id="${Number(d.id)}">${icons[(Number(d.id)-1)%icons.length]} ${esc(d.name)}</button>`
+  ).join("");
+  const d = devices.find(x => Number(x.id) === Number(activeId));
+  const ic = icons[(Number(d.id)-1)%icons.length];
+  root.innerHTML = `<article class="device active-wrap">
+    <div class="device-top"><div class="device-icon">${ic}</div><span class="status">● Sẵn sàng</span></div>
+    <h4>${esc(d.name)}</h4><div class="sub">Android Cloud · Thẻ #${d.id} · ${resOf(d).w}×${resOf(d).h} · ${resOf(d).dpi} dpi</div>
+    <div class="preview"><div class="phone" style="width:${Math.round(99*resOf(d).w/resOf(d).h)}px">${ic}</div><label>VIRTUAL ANDROID DEVICE</label></div>
+    <div class="specs">
+      <div class="spec"><small>CPU mẫu</small><b>${esc(d.cpu)}</b></div>
+      <div class="spec"><small>RAM mẫu</small><b>${esc(d.ram)}</b></div>
+      <div class="spec"><small>Mục tiêu</small><b>${esc(d.fps)}</b></div>
+    </div>
+    <div class="cardbuttons">
+      <button type="button" class="btn primary" data-action="play" data-id="${d.id}">↗ Vào Chơi</button>
+      <button type="button" class="btn secondary" data-action="rename" data-id="${d.id}">✎ Đổi tên</button>
+      <button type="button" class="btn secondary" data-action="remove" data-id="${d.id}">× Xóa máy</button>
+    </div></article>`;
+  saveState();
+  syncTools();
+}
+function switchDevice(id) {
+  if (!devices.some(d => Number(d.id) === Number(id))) return;
+  activeId = Number(id); render();
+}
+function createDevice() {
+  if (devices.length >= 30) { alert("Giới hạn 30 thẻ thiết bị."); return; }
+  const id = nextId++;
+  devices.push({id, name:"Cloud Phone " + String(id).padStart(2,"0"), cpu:"8 vCPU*", ram:"8 GB*", fps:"60 FPS*",w:1080,h:1920,dpi:420,clip:[]});
+  activeId = id; render();
+}
+function play(id) {
+  if (!devices.some(d => Number(d.id) === Number(id))) return;
+  const r = activeKeyRecord();
+  if (!r || !r.verified) {
+    setKeyMessage("Bạn cần nhập key trước khi vào chơi.", "bad");
+    $("getkey").scrollIntoView({behavior:"smooth"});
+    return;
+  }
+  window.open(PLAY_URL, "_blank");
+}
+function renameDevice(id) {
+  const d = devices.find(x => Number(x.id) === Number(id));
+  if (!d) return;
+  const name = prompt("Tên mới cho thiết bị:", d.name);
+  if (name && name.trim()) { d.name = name.trim().slice(0,48); render(); }
+}
+function removeDevice(id) {
+  devices = devices.filter(d => Number(d.id) !== Number(id));
+  if (Number(activeId) === Number(id)) activeId = devices.length ? devices[0].id : null;
+  render();
+}
+$("deviceTabs").addEventListener("click", e => {
+  const b = e.target.closest("[data-device-id]");
+  if (b) switchDevice(Number(b.dataset.deviceId));
+});
+$("activeDevice").addEventListener("click", e => {
+  const b = e.target.closest("[data-action]");
+  if (!b) return;
+  const id = Number(b.dataset.id);
+  if (b.dataset.action === "play") play(id);
+  if (b.dataset.action === "rename") renameDevice(id);
+  if (b.dataset.action === "remove") removeDevice(id);
+});
+$("create").addEventListener("click", createDevice);
+$("createTop").addEventListener("click", createDevice);
+$("playFirst").addEventListener("click", () => {
+  if (devices.length) play(activeId ?? devices[0].id);
+  else alert("Hãy tạo máy trước.");
+});
+$("reset").addEventListener("click", () => {
+  if (confirm("Khôi phục danh sách về máy mẫu?")) {
+    devices = starter.map(x => ({...x})); activeId = 1; nextId = 2; render();
+  }
+});
+
+/* ===== CỔNG KEY ===== */
+function lockSite(on){
+  $("gate").classList.toggle("hide",!on);
+  document.body.classList.toggle("locked",on);
+}
+/* ===== ĐỒNG HỒ TRÊN CÙNG ===== */
+function topClockUpdate(r){
+  const box=$("topClock"), t=$("topClockTime"), st=$("topClockState");
+  if(!r){box.classList.add("off");t.textContent="00:00:00";st.textContent="Chưa kích hoạt / hết hạn";return;}
+  box.classList.remove("off");
+  const rem=Math.max(0,r.expiresAt-nowT(r));
+  t.textContent=[Math.floor(rem/3600000),Math.floor(rem%3600000/60000),Math.floor(rem%60000/1000)].map(n=>String(n).padStart(2,"0")).join(":");
+  st.textContent=r.verified?"Đã xác minh · 50h":"Chưa xác minh key";
+}
+$("topClock").addEventListener("click",()=>$("getkey").scrollIntoView({behavior:"smooth"}));
+
+/* ===== ĐỘ PHÂN GIẢI + BẢNG NHỚ TẠM ===== */
+function resOf(d){return {w:Number(d.w)||1080,h:Number(d.h)||1920,dpi:Number(d.dpi)||420};}
+function curDev(){return devices.find(x=>Number(x.id)===Number(activeId));}
+function msg(id,text,kind){const e=$(id);e.textContent=text;e.className="key-message"+(kind?" "+kind:"");}
+function syncTools(){
+  const d=curDev(), dis=!d;
+  ["resPreset","resW","resH","resDpi","resApply","clipText","clipPaste","clipSend"].forEach(i=>$(i).disabled=dis);
+  if(!d){$("clipList").innerHTML="";$("resFor").textContent="Chưa có máy nào";return;}
+  const r=resOf(d);
+  $("resFor").textContent="Áp dụng cho: "+d.name;
+  $("resW").value=r.w;$("resH").value=r.h;$("resDpi").value=r.dpi;
+  const key=r.w+"x"+r.h;
+  $("resPreset").value=[...$("resPreset").options].some(o=>o.value===key)?key:"custom";
+  const list=Array.isArray(d.clip)?d.clip:[];
+  $("clipList").innerHTML=list.map((c,i)=>`<div class="clip-item"><span>${esc(c.slice(0,80))}</span><button type="button" class="btn secondary" data-clip="${i}">Sao chép</button></div>`).join("");
+}
+$("resPreset").addEventListener("change",()=>{
+  const v=$("resPreset").value; if(v==="custom")return;
+  const [w,h]=v.split("x"); $("resW").value=w;$("resH").value=h;
+});
+$("resApply").addEventListener("click",()=>{
+  const d=curDev(); if(!d)return;
+  const w=Math.round(Number($("resW").value)),h=Math.round(Number($("resH").value)),dpi=Math.round(Number($("resDpi").value));
+  if(!(w>=240&&w<=4096&&h>=240&&h<=4096&&dpi>=120&&dpi<=640)){msg("resMsg","Thông số không hợp lệ (cạnh 240–4096, DPI 120–640).","bad");return;}
+  d.w=w;d.h=h;d.dpi=dpi;render();
+  msg("resMsg",`Đã áp dụng ${w}×${h} · ${dpi} dpi cho ${d.name}.`,"good");
+});
+$("clipPaste").addEventListener("click",async()=>{
+  try{$("clipText").value=await navigator.clipboard.readText();msg("clipMsg","Đã lấy nội dung từ bảng nhớ tạm.","good");}
+  catch(e){$("clipText").focus();msg("clipMsg","Trình duyệt chặn đọc tự động. Hãy dán thủ công vào ô (nhấn giữ → Dán).","bad");}
+});
+$("clipSend").addEventListener("click",async()=>{
+  const d=curDev(),text=$("clipText").value;
+  if(!d)return; if(!text.trim()){msg("clipMsg","Hãy dán nội dung cần gửi.","bad");return;}
+  if(text.length>5000){msg("clipMsg","Tối đa 5000 ký tự.","bad");return;}
+  d.clip=[text,...(Array.isArray(d.clip)?d.clip:[]).filter(x=>x!==text)].slice(0,5);
+  render();
+  let copied=true;try{await navigator.clipboard.writeText(text);}catch(e){copied=false;}
+  msg("clipMsg",`Đã gửi vào bảng nhớ tạm của ${d.name}.`+(copied?" Trong phiên chơi, nhấn giữ ô nhập → Dán.":" Hãy sao chép lại từ danh sách bên dưới rồi dán trong phiên chơi."),"good");
+});
+$("clipList").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-clip]"),d=curDev(); if(!b||!d)return;
+  const t=(d.clip||[])[Number(b.dataset.clip)]; if(t==null)return;
+  try{await navigator.clipboard.writeText(t);msg("clipMsg","Đã sao chép.","good");}catch(err){$("clipText").value=t;$("clipText").select();msg("clipMsg","Đã đưa vào ô, hãy sao chép thủ công.");}
+});
+
+/* ===== GETKEY ===== */
+const KEY_STORAGE = "ko_cloud_getkey_v2";
+let keyTicker = null;
+
+function randToken(n = 24) {
+  const a = "abcdefghijkmnpqrstuvwxyz23456789", bytes = new Uint8Array(n);
+  if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(bytes);
+  else for (let i = 0; i < n; i++) bytes[i] = Math.floor(Math.random() * 256);
+  let s = ""; for (const b of bytes) s += a[b % a.length];
+  return s;
+}
+function readJSON(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }
+function setKeyMessage(message, kind = "") {
+  const el = $("keyStatus");
+  el.textContent = message;
+  el.className = "key-message" + (kind ? " " + kind : "");
+}
+/* Lưu key "ghim cứng": 3 nơi (localStorage x2 + cookie), không xoá khi hết hạn, chống lùi giờ */
+const USED_STORAGE = "ko_cloud_used_v2";
+let tickN = 0;
+function readRec() {
+  let r = readJSON(KEY_STORAGE) || readJSON(USED_STORAGE);
+  if (!r) {
+    try { const m = document.cookie.match(/(?:^|; )ko_k=([^;]*)/); if (m) r = JSON.parse(decodeURIComponent(m[1])); } catch (e) {}
+  }
+  return r && typeof r.key === "string" && Number.isFinite(r.expiresAt) ? r : null;
+}
+function writeRec(r) {
+  const j = JSON.stringify(r);
+  try { localStorage.setItem(KEY_STORAGE, j); localStorage.setItem(USED_STORAGE, j); } catch (e) {}
+  try { document.cookie = "ko_k=" + encodeURIComponent(j) + ";max-age=31536000;path=/;SameSite=Lax"+(location.protocol==="https:"?";Secure":""); } catch (e) {}
+}
+function nowT(r) { return Math.max(Date.now(), (r && r.seen) || 0); }
+function isExpired(r) { return !!r && nowT(r) >= r.expiresAt; }
+function activeKeyRecord() {
+  const r = readRec();
+  if (!r || r.key !== FIXED_KEY || isExpired(r)) return null;
+  return r;
+}
+function renderKey() {
+  const r = activeKeyRecord(), old = readRec(), timer = $("keyTimer");
+  const dead = !r && old && old.key === FIXED_KEY && isExpired(old);
+  $("issuedKey").textContent = r ? "ĐÃ KÍCH HOẠT" : (dead ? "ĐÃ HẾT 50 GIỜ" : "Chưa kích hoạt");
+  topClockUpdate(r);
+  if (!r) lockSite(true);
+  if (r) {
+    r.seen = Math.max(Date.now(), r.seen || 0);
+    if (++tickN % 5 === 0) writeRec(r);
+    const rem = Math.max(0, r.expiresAt - r.seen);
+    const h = Math.floor(rem / 3600000), m = Math.floor((rem % 3600000) / 60000), s = Math.floor((rem % 60000) / 1000);
+    timer.textContent = [h, m, s].map(n => String(n).padStart(2, "0")).join(":");
+    timer.style.color = "var(--cyan)";
+  } else {
+    timer.textContent = dead ? "ĐÃ HẾT HẠN" : "CHƯA CÓ";
+    timer.style.color = "#ff9eaf";
+  }
+}
+function verifyKey() {
+  const input = $("keyInput").value.trim();
+  if (!input) { setKeyMessage("Vui lòng nhập key.", "bad"); return; }
+  if (input !== FIXED_KEY) { setKeyMessage("SAI KEY! Vui lòng kiểm tra lại.", "bad"); return; }
+  const old = readRec();
+  if (old && old.key === FIXED_KEY && isExpired(old)) { renderKey(); setKeyMessage("Key này đã dùng hết 50 giờ và không thể kích hoạt lại.", "bad"); return; }
+  let r = activeKeyRecord();
+  if (!r) {
+    const now = Date.now();
+    r = {key:FIXED_KEY, uid:randToken(12), createdAt:now, expiresAt:now + KEY_LIFETIME_MS, seen:now, verified:true};
+  }
+  r.verified = true;
+  writeRec(r);
+  if (!readRec()) { setKeyMessage("Không thể lưu key trên trình duyệt này.", "bad"); return; }
+  renderKey();
+  setKeyMessage("KEY HỢP LỆ! Đang vào hệ thống... Hiệu lực 50 giờ.", "good");
+  setTimeout(() => lockSite(false), 700);
+}
+$("verifyKeyBtn").addEventListener("click", verifyKey);
+$("keyInput").addEventListener("keydown", e => { if (e.key === "Enter") verifyKey(); });
+
+loadState();
+render();
+renderKey();
+{const r0=activeKeyRecord();lockSite(!(r0&&r0.verified));renderKey();const o0=readRec();if(!r0&&o0&&o0.key===FIXED_KEY&&isExpired(o0))setKeyMessage("Key đã hết 50 giờ và không thể dùng lại.","bad");}
+keyTicker = setInterval(renderKey, 1000);
+</script></body></html>
